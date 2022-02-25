@@ -21,3 +21,50 @@
 Подсказка: сложение элементов матриц выполнять поэлементно — первый элемент первой строки первой матрицы
 складываем с первым элементом первой строки второй матрицы и т.д.
 """
+
+class Matrix:
+   
+    def __init__(self, list_of_lists):
+        self.mat = list_of_lists
+
+    def __getitem__(self, idx):
+        return self.mat[idx]
+
+    def __str__(self):
+        """
+        Вывод матрицы в привычном виде
+        """
+        return '\n'.join('\t'.join(map(str, row)) for row in self.mat)
+
+    def __add__(self, other):
+        """
+        Cложения двух объектов класса Matrix
+
+        self - первая слагаемая матрица
+        other - вторая слагаемая матрица
+        """
+        other = Matrix(other)
+        result = []
+        numbers = []
+        for i in range(len(self.mat)):
+            for j in range(len(self.mat[0])):
+                summa = other[i][j] + self.mat[i][j]
+                numbers.append(summa)
+                if len(numbers) == len(self.mat):
+                    result.append(numbers)
+                    numbers = []
+        return Matrix(result)
+
+
+matrix1 = [[31, 32, 33], [37, 43, 57], [51, 86, 91]]
+matrix2 = [[1, 2, 0], [3, 4,  -1], [5, 6, 1]]
+matrix3 = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+
+
+my_matrix1 = Matrix(matrix1)
+print(my_matrix1, "\n")
+my_matrix2 = Matrix(matrix2)
+print(my_matrix2, "\n")
+my_matrix3 =Matrix(matrix3)
+my_matrix3 = my_matrix1 + my_matrix2
+print(f"Сумма двах матриц:\n{my_matrix3}")
