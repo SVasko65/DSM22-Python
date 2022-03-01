@@ -39,5 +39,115 @@
 количество ячеек в ряду — 5.
 Тогда метод make_order() вернёт строку: *****\n*****\n*****.
 
-Подсказка: подробный список операторов для перегрузки доступен по ссылке.
 """
+
+class Cell:
+        
+    def __init__(self, param):
+        self.param = param
+
+    #def __set__(self, param):
+    #    self.param = param
+    #    return self
+
+    def __add__(self, other):
+        """
+        Сложение. Объединение двух клеток.
+        При этом число ячеек общей клетки должно равняться сумме ячеек исходных двух клеток.
+
+        self - число ячеек 1 клетки
+        other - число ячеек 2 клетки
+        """
+        self.param += other.param
+        return self
+
+
+    def __sub__(self, other):
+        """
+        Вычитание. Участвуют две клетки.
+        Операцию необходимо выполнять только если разность количества ячеек двух клеток больше нуля,
+        иначе выводить соответствующее сообщение.
+
+        self - число ячеек 1 клетки
+        other - число ячеек 2 клетки
+        """
+        if (self.param - other.param) <= 0:
+            print(f"Недопустимая операция над клеткой с количеством ячеек: {self.param - other.param}!!!")
+            self.param = 0
+        else:
+            self.param -= other.param
+        return self
+        
+    def __mul__(self, other):
+        """
+        Умножение. Создаётся общая клетка из двух.
+        Число ячеек общей клетки определяется как произведение количества ячеек этих двух клеток.
+
+        self - число ячеек 1 клетки
+        other - число ячеек 2 клетки
+        """
+        self.param *= other.param
+        return self
+
+    def __truediv__(self, other):
+        """
+        Деление. Создаётся общая клетка из двух.
+        Число ячеек общей клетки определяется как целочисленное деление количества ячеек этих двух клеток.
+
+        self - число ячеек 1 клетки
+        other - число ячеек 2 клетки
+        """
+        if (self.param / other.param) <= 1:
+            print(f"Недопустимая операция над клеткой с количеством ячеек: {(self.param / other.param):.2f}!!!")
+            self.param = 0
+        else:
+            self.param = int(self.param / other.param)
+        return self
+
+    def make_order(self, row):
+        """
+        Возвращает строку вида *****\n*****\n*****...
+        """
+        if self.param == 0:
+            str_cell = ""
+        else:
+            i = 0
+            x = row 
+            str_cell = ""
+            while i != self.param:
+                str_cell += '*'
+                i += 1
+                if i == x:
+                    if x <= self.param:
+                        str_cell += '\n'
+                    x += row
+        return str_cell
+
+
+
+
+# Блок проверки работы программы
+
+my_row = 5 # количество ячеек в строке
+my_Cell2 = Cell(13)  #  количество ячеек во 2-ой клетке
+
+my_Cell1 = Cell(12)  #  инициация количества ячеек в 1-ой(исходной) клетке
+
+print(f"Исходная клетка 1:\n{my_Cell1.make_order(my_row)}")
+print(f"Исходная клетка 2:\n{my_Cell2.make_order(my_row)}")
+print('=' * 50)
+
+my_Cell = (my_Cell1 + my_Cell2)
+print(f"Объединение двух клеток:\n{my_Cell.make_order(my_row)}")
+
+my_Cell1 = Cell(12) #  инициация количества ячеек в 1-ой(исходной) клетке
+my_Cell = (my_Cell1 - my_Cell2)
+print(f"Вычитание двух клеток:\n{my_Cell.make_order(my_row)}")
+
+my_Cell1 = Cell(12) #  инициация количества ячеек в 1-ой(исходной) клетке
+my_Cell = (my_Cell1 * my_Cell2)
+print(f"Умножение двух клеток:\n{my_Cell.make_order(my_row)}")
+
+my_Cell1 = Cell(12) #  инициация количества ячеек в 1-ой(исходной) клетке
+my_Cell = (my_Cell1 / my_Cell2)
+print(f"Деление двух клеток:\n{my_Cell.make_order(my_row)}")
