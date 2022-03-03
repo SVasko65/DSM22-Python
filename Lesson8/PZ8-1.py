@@ -11,3 +11,36 @@
 должен проводить валидацию числа, месяца и года (например, месяц — от 1 до 12).
 Проверить работу полученной структуры на реальных данных.
 """
+
+class Data:
+    @classmethod
+    def to_Int(cls, param: str):
+        """
+        Извлекает число, месяц, год из param
+        Преобразовывает его тип к типу «Число»
+        """
+        work_list = param.split("-")
+        return int(''.join(work_list))
+
+    @staticmethod
+    def Valid(param: str):
+        """
+        Валидация числа, месяца и года (например, месяц — от 1 до 12)
+        """
+        try:
+            if int(param.split("-")[1]) < 1 or int(param.split("-")[1]) > 12:
+                raise  Exception
+            return (f'Месяц указан верно: {param.split("-")[1]}')
+        except ValueError:
+            return (f'Введен месяц в неверном формате: {param.split("-")[1]}')
+        except Exception:
+            return (f'Указан неcуществующий месяц: {param.split("-")[1]}')
+
+my_data1 = "24-02-2022"
+my_data2 = "24-23-2022"
+my_data3 = "24-аа-2022"
+
+print(f"Дата {my_data1} преобразовано в число {Data.to_Int(my_data1)}, с которым можно выполнить арифметичеускую операцию (прибавить 100) {Data.to_Int(my_data1) + 100}")
+print(f"{Data.Valid(my_data1)}")
+print(f"Во входных данных допущена ошибка. {Data.Valid(my_data2)}")
+print(f"Во входных данных допущена ошибка. {Data.Valid(my_data3)}")

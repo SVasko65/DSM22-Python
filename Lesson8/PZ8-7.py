@@ -10,3 +10,34 @@
 выполните сложение и умножение созданных экземпляров.
 Проверьте корректность полученного результата.
 """
+
+class Number_Complex:
+
+    def __init__(self, x_real, y_imag):
+        self.x = x_real  # Вещественная часть
+        self.y = y_imag  # Мнимая часть
+
+    def __str__(self):
+        """
+        Преобразование объекта в строку
+        """
+        return '(' + str(self.x) + '+' + str(self.y) + 'i)'
+     
+    def __mul__(self, other):
+        """
+        Умножение двух комлексных чисел
+        """
+        return Number_Complex((self.x * other.x - self.y * other.y), self.y * other.x)
+
+    def __add__(self, other):
+        """
+        Сложение двух комлексных чисел
+        """
+        return Number_Complex(self.x + other.x, self.y + other.y)
+
+     
+a = Number_Complex(1,2)
+b = Number_Complex(3,1)
+
+print(f"{a} сложить с {b} равно {a + b}")
+print(f"{a} умножить на {b} равно {a * b}")
