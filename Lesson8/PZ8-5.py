@@ -64,6 +64,7 @@ class Division:
     """
     Учет полученной оргтехники в подразделении
     """
+
     _cls_dict = {}
 
     def __init__(self, divis, inp_data):
