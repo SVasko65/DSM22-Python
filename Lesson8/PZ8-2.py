@@ -22,3 +22,4 @@ except my_Error as Err:
 else:
     print(f"Все хорошо. Ваше число: {(100/divider):.2f}")
     
+
