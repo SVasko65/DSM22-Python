@@ -7,3 +7,19 @@
 При вводе нуля в качестве делителя программа должна
 корректно обработать эту ситуацию и не завершиться с ошибкой.
 """
+
+class my_Error(Exception):
+    def __init__(self, txt):
+        self.text = txt
+
+# Блок проверка программы
+divider=int(input("Введите делитель числа 100: "))
+try:
+        if divider == 0:
+            raise my_Error("На ноль делить нельзя")
+except my_Error as Err:
+    print(Err)
+else:
+    print(f"Все хорошо. Ваше число: {(100/divider):.2f}")
+    
+

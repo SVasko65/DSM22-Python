@@ -18,3 +18,27 @@
 Класс-исключение должен не позволить пользователю ввести текст (не число) и отобразить соответствующее сообщение.
 При этом работа скрипта не должна завершаться.
 """
+
+class ErrorNumber(Exception):
+    """ 
+    Пользовательский класс-исключение
+    """
+    def __init__(self, text_error):
+        self.text = text_error
+
+input_string = None
+
+# Заполнение списка
+while  True: #input_string != 'stop':
+    input_string = input("Введите число элемент списка.\n(Чтобы остановить ввод введите 'stop'): ")
+    if input_string == 'stop':
+        break
+    try:
+        my_list.append(int(input_string))
+    except ValueError:  # перехват стандартного исключения
+        print(ErrorNumber(f"!!! Ошибка ввода. Введено ни число - {input_string}. Повторите ввод!!!"))
+        continue
+    
+# Вывод на экран введенный список
+print(f"{'*' * 50}\nВведен список чисел: {my_list}")
+
