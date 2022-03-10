@@ -33,68 +33,47 @@ class WareHouse:
         self._cls_dict[self.__i] = self.cls_list
         WareHouse.__i += 1
     
-    def extract(self, out_data, fname, count):
+    @staticmethod
+    def extract(out_data, fname, count):
         """
         Выдача оргтехники со склада
 
-        дальше можно расширить поиск по серии, марки или еще чему либо
+        out_data - дата списания оргтехники
+        fname    - наименование оргтехники
+        count    - количество списываемой оргтехники
         """
-        ikey=0
-        outkey = []
-        out_equipment = []
-        #aaa = self._cls_dict{:}
-        flist = []
-        outkey = [(y, (x)) for y, x in self._cls_dict.items() if fname in x]
-        print(outkey)
-        if len(outkey) == 0:
+        outdata = {}           # Возвращаемая информация о списанной оргтехники
+        ikey=0                 # Рабочий ключ по словарю склада
+        out_equipment = []     # Рабочая информация для списания оргтехники 
+        flist = []             # Рабочая информация об оргтехнике из словаря склада
+        outdt = [[y, x] for y, x in WareHouse._cls_dict.items() if fname in x]
+        if len(outdt) == 0:    # Проверка наличия оргтехники на складе
             print(f"{fname} на складе отсутствует")
         else:   
-            ikey = outkey[0][0] # Выделяем ключ найденной оргтехники
-            print('Ключ', ikey)
-            flist = outkey[0][1] # Выделяем найденную информацию об оргтехнике
-            print('Найденная информация ', flist)
-            print('До', self._cls_dict[ikey])
+            ikey = outdt[0][0]              # Выделяем ключ найденной оргтехники
+            flist = outdt[0][1]             # Выделяем найденную информацию об оргтехнике
             flist[(len(flist)-1)] -= count  # Уменьшаем количество оргтехники на складе
-            
-            #self._cls_dict[ikey] = flist       # Сохраняем информацию об остатке на складе 
-            
-            #out_equipment = outkey
-            outkey[0][1][0] = out_data
-            outkey[0][1][-1] = count
-            print('выходные данные ', outkey[0])
-            #out_equipment[0][1][0] = out_data
-            #out_equipment[0][1][-1] = count
-            print('После', self._cls_dict)
             print(f'{fname} списан со склада')
-            return out_equipment
+            out_equipment = flist[:]        # Получаем рабочую копию информации для списания в подразделение
+            out_equipment[0] = out_data     # Фиксируем в рабочей информации дату списания
+            out_equipment[-1] = count       # Фиксируем в рабочей информации количество списываемой оргтехники
+            outdata.update({ikey: out_equipment}) #
+            return outdata
             
 class Division:
     """
     Учет полученной оргтехники в подразделении
     """
-    __i = 1
-    _cls_dict = {__i: list()}
 
-    def __init__(self, data_input, cls_equipment, count):
-        self.cls_list = list()
-        self.cls_list.append(data_input)                            # Дата поступления в подразделение
-        self.cls_list.extend(cls_equipment.__str__().split(','))    # Поступившая оргтехника
-        self.cls_list.append(count)                                 # Количество поступившей данной оргтехники
- 
-    def add_to(self):
-        """
-        Добавляем оргтехнику в подразделение
-        """
-        self._cls_dict[self.__i] = self.cls_list
-        Division.__i += 1
-    
-    def extract(self, name):
-        """
-        Выбытие оргтехники из подразделения
+    _cls_dict = {}
 
-        дальше можно расширить поиск по серии, марки или еще чему либо
-        """
-
+    def __init__(self, divis, inp_data):
+        self.divis = divis
+        self.inp_data = inp_data
+        self._cls_dict.update({divis: inp_data})  # Включение оргтехники в учет подразделения
+        
+    def __str__(self):
+        return f'{self._cls_dict}'
  
 class OfficeEquipment(ABC):
 
@@ -103,9 +82,7 @@ class OfficeEquipment(ABC):
         self.price = price  # Цена данной оргтехники
 
     def __str__(self):
-        #obj = f"{self.name},{self.price}"
-        #return obj
-        pass
+         pass
 
 class mPrinter(OfficeEquipment):
 
@@ -157,27 +134,6 @@ my3.add_to()
 print(f"На склад поступила следующая техника:\n{WareHouse._cls_dict}")
 
 # Передача в подразделение оргтехники
-outsklada = my2.extract('08.03.2022','Сканер', 1)
-print(outsklada)
-print(WareHouse._cls_dict)
-
-
-
-#i = 0  # Инициализация счетчика
-input_string = None
-my_list = []
-
-# Заполнение списка
-#while  True: #input_string != 'stop':
-#    input_string = input("Введите число элемент списка.\n(Чтобы остановить ввод введите 'stop'): ")
-#    if input_string == 'stop':
-#        break
-#    try:
-#        my_list.append(int(input_string))
-#    except ValueError:  # перехват стандартного исключения
-#       print(ErrorNumber(f"!!! Ошибка ввода. Введено ни число - {input_string}. Повторите ввод!!!"))
-#        continue
-    
-# Вывод на экран введенный список
-# print(f"{'*' * 50}\nВведен список чисел: {my_list}")
-
+outsklada = WareHouse.extract('08.03.2022','Сканер', 1)
+div1 = Division('Основное', outsklada)
+print(f"В подразделение '{div1.divis}' поступила следующая оргтехника {div1.inp_data}")

@@ -41,3 +41,4 @@ b = Number_Complex(3,1)
 
 print(f"{a} сложить с {b} равно {a + b}")
 print(f"{a} умножить на {b} равно {a * b}")
+

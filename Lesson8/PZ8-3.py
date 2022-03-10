@@ -41,3 +41,4 @@ while  True: #input_string != 'stop':
     
 # Вывод на экран введенный список
 print(f"{'*' * 50}\nВведен список чисел: {my_list}")
+
